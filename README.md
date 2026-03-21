@@ -38,7 +38,7 @@ A custom UI rendering approach for Shopify stores focused on enhancing product d
 
 * Built dynamic product rendering using Shopify-compatible JSON data structures
 * Enhanced UX for product discovery, interaction, and cart actions
-* Event-driven UI behavior for flexible integration with Shopify themes** TODO: NEED CLARITY ON THIS LINE
+* Event-based UI interactions enabling flexible integration with Shopify themes
 * Explored reusability across multiple storefronts before aligning with Shopify’s native templating for faster delivery turnaround time
 
 👉 [View Details](./shopify-ui/)
