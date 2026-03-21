@@ -2,9 +2,12 @@
 
 ## 🔹 Overview
 
-AuthX is a lightweight, framework-agnostic authentication system designed for embedded environments like Shopify (especially non-Shopify+ stores), enabling a seamless, plug-and-play login experience without relying on expensive platform upgrades.
+AuthX is a lightweight, framework-agnostic authentication system designed for embedded environments like Shopify (especially non-Shopify+ stores), enabling a seamless, plug-and-play login experience.
 
 The system was built to overcome limitations of Shopify’s default authentication (email-only login) by introducing OTP-based login and social authentication, while keeping costs minimal and integration simple.
+
+While third-party Shopify apps provide similar functionality, they introduce recurring costs and limited customization. AuthX was built to provide a cost-effective, flexible alternative with full control over authentication flows, while remaining reusable across multiple storefronts.
+
 
 ---
 
