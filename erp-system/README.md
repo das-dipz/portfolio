@@ -291,3 +291,154 @@ This is reflected in:
 * Gradually introducing architectural complexity only when required
 
 This approach helped reduce risk while continuously improving system capability.
+
+---
+
+## 🔹 Trade-offs & Constraints
+
+### 1. Offline-First vs Cloud Scalability
+
+The initial decision to build the system as an offline-first application enabled rapid adoption and low operational cost but limited scalability and centralized visibility.
+
+**Trade-off:**
+
+* Simpler deployment and independence from internet connectivity
+* Limited ability to support multi-store operations and centralized reporting
+
+This trade-off was intentional to validate real-world usage before investing in a cloud-native architecture.
+
+---
+
+### 2. Simplicity vs Extensibility (Early Versions)
+
+The v2 architecture prioritizes simplicity and fast iteration over long-term extensibility.
+
+**Trade-off:**
+
+* Faster development and easier maintenance in early stages
+* Limited modularization compared to a service-oriented architecture
+
+This was a conscious decision to avoid over-engineering before product-market validation.
+
+---
+
+### 3. Local Deployment vs Operational Overhead
+
+While local deployment reduced infrastructure costs, it introduced operational challenges.
+
+**Trade-off:**
+
+* No recurring hosting cost and better control over deployments
+* Required custom PowerShell-based automation for startup, database setup/migration, and backups
+
+This highlighted the need for a more standardized deployment model in future versions.
+
+---
+
+### 4. PostgreSQL vs Azure SQL (Cloud Transition)
+
+PostgreSQL worked well for local deployments but presents challenges when transitioning to a multi-tenant SaaS model.
+
+**Trade-off:**
+
+* PostgreSQL offers flexibility and portability
+* Azure SQL provides better support for elastic scaling, multi-tenant cost optimization, and cross-database querying
+
+The choice for v3 is influenced more by operational model requirements than by database capability alone.
+
+---
+
+### 5. Event-Driven Architecture vs System Complexity
+
+Introducing an event-driven architecture in v3 improves scalability and decoupling but adds complexity.
+
+**Trade-off:**
+
+* Better scalability and separation of concerns
+* Increased complexity in debugging, monitoring, and system coordination
+
+This approach is planned to be introduced gradually to balance complexity with system maturity.
+
+---
+
+### 6. Shared Database vs Tenant Isolation
+
+The initial multi-tenant strategy favors shared databases to reduce cost.
+
+**Trade-off:**
+
+* Lower infrastructure cost per client
+* Increased responsibility to enforce strict tenant isolation
+
+To address this, tenant-aware routing and access controls are introduced to prevent cross-tenant data access.
+
+---
+
+### 7. Cost Optimization vs Feature Expansion
+
+Keeping per-client cost low is a primary constraint, especially in a competitive market.
+
+**Trade-off:**
+
+* Controlled infrastructure spending and competitive pricing
+* Slower rollout of advanced features and infrastructure
+
+This constraint continues to influence design decisions across architecture and feature planning.
+
+---
+
+### 8. Rapid Iteration vs Technical Debt
+
+Frequent changes based on user feedback improved usability but introduced areas of technical debt.
+
+**Trade-off:**
+
+* Faster alignment with real user needs
+* Need for architectural refactoring in v3
+
+The transition to a cloud-native architecture is also an opportunity to address these limitations.
+
+---
+## 🔹 Future Enhancements & Vision
+
+The system is being designed with a long-term vision of evolving into a data-driven and intelligent ERP platform.
+
+**Planned Enhancements:**
+
+* **Enhanced dashboard and analytics:**
+
+  * Introduction of richer KPI-driven dashboards for better operational visibility
+  * Exploration of Power BI integration to enable faster development of visualizations and reduce custom frontend implementation effort
+
+* **Customer engagement capabilities (CRM direction):**
+
+  * Integration with messaging platforms such as WhatsApp to enable direct communication with end customers
+  * Lays the foundation for broader CRM capabilities
+
+* **Data-driven decision support:**
+
+  * Leveraging collected operational data to provide actionable insights to business owners
+  * Examples include identifying fast-moving products, stock optimization, and sales trends
+
+---
+
+**Long-Term Vision:**
+
+* **AI-assisted operations:**
+
+  * Use of AI-driven systems to assist in customer support workflows, reducing manual effort and improving response times
+  * Human oversight retained for validation and escalation handling
+
+* **Intelligent business insights:**
+
+  * Applying data analysis and AI models to suggest operational improvements
+  * Example: recommending store layout or inventory placement strategies based on historical sales patterns
+
+* **Scalable operational efficiency:**
+
+  * Aim to significantly reduce manual workload while maintaining control and accuracy through a combination of automation and intelligent systems
+
+---
+
+
+
