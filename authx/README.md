@@ -152,6 +152,36 @@ The approach prioritized minimal operational cost while maintaining flexibility 
 * Enhance UI/UX polish and responsiveness
 
 ---
+## 🔹 Architecture Diagram
+
+```mermaid
+flowchart LR
+
+    A[User on Shopify Storefront] --> B[AuthX JS Widget]
+
+    B -->|OTP Request / OAuth Initiation| C[Azure Functions API]
+
+    C -->|Send OTP| D[Brevo Email/SMS]
+    D -->|OTP Delivered| A
+
+    A -->|Enter OTP| B
+    B -->|Verify OTP| C
+
+    C -->|OAuth Redirect| E[Google OAuth]
+    E -->|Callback| C
+
+    C -->|Create / Fetch Customer| F[Shopify Admin API]
+
+    C -->|Generate JWT| G[JWT Token]
+
+    G --> B
+    B -->|Store Token & Claims| H[Browser Local Storage]
+
+    H --> I[Profile Page UI]
+
+    I -->|Display / Update User Info| B
+
+---
 
 ## 🔹 Key Takeaways
 
