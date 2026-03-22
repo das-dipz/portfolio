@@ -118,17 +118,19 @@ Version 3 represents a shift from a single-client, offline system to a scalable,
 **Planned Characteristics:**
 
 * Angular 16-based shared SaaS frontend
-* Backend powered primarily by Azure Functions, with optional evolution to containerized services (AKS) if required for scaling
+* Backend powered primarily by Azure Functions for cost-efficient scaling, with optional evolution to containerized services (AKS) for higher control and throughput
 * API Gateway for routing, rate limiting, and tenant-aware request handling
-* Event-driven architecture using Azure Service Bus for asynchronous workflows
+* Event-driven architecture using Azure Service Bus to decouple workflows such as order processing, stock updates, and future integrations
 * Modular service design to support future domain expansion beyond pharmacy
+* Tenant-aware routing and access controls to ensure strict data isolation across clients, preventing cross-tenant data access even within shared infrastructure
 
 **Data Architecture:**
 
 * Separate master databases per business domain (e.g., pharmacy, retail, manufacturing)
 * Shared database for client-specific operational data for standard/free-tier clients
-* Architecture designed to allow seamless migration of individual clients to dedicated databases without schema changes
+* Architecture designed to allow migration of individual clients to dedicated databases with minimal changes to application logic, primarily through a tenant-aware routing layer
 * Multi-tenant design driven by cost efficiency and gradual scalability
+* Secure storage of connection details and secrets planned using Azure Key Vault
 
 **Key Architectural Drivers:**
 
@@ -144,3 +146,148 @@ Version 3 represents a shift from a single-client, offline system to a scalable,
 * Account reconciliation as a foundation for compliance workflows (e.g., GST-related processes)
 * Multi-language support
 * Licensing-based feature and infrastructure segmentation
+
+
+---
+## 🔹 Key Design Decisions
+
+### 1. Local-First Architecture (Version 2)
+
+The initial versions were intentionally designed as local, offline-first systems.
+
+**Rationale:**
+
+* Reduce infrastructure cost during early validation
+* Avoid dependency on internet connectivity in store environments
+* Enable quick deployment and adoption without operational overhead
+
+While simpler than a cloud setup, local deployments were supported through custom PowerShell-based automation for application startup, database setup/migration, and backup routines, ensuring reliable operation across client environments.
+
+This approach allowed real-world validation of workflows before investing in a cloud-native architecture.
+
+---
+
+### 2. Technology Stack Selection (Angular + Node.js + PostgreSQL)
+
+The v2 stack was chosen to balance speed of development with flexibility and operational simplicity.
+
+**Frontend (Angular):**
+
+* Chosen for its structured framework and suitability for business applications
+* Angular Material enabled rapid development of compact, responsive, and operator-friendly UI
+* Well-suited for form-heavy, transactional workflows where billing efficiency and usability were critical
+
+**Backend (Node.js / Express):**
+
+* Lightweight and easy to iterate during early product development
+* Sufficient for handling transactional workflows in a local deployment
+* Allowed rapid feedback-driven changes without significant overhead
+
+**Database (PostgreSQL):**
+
+* Cost-effective and easy to deploy in local environments
+* Flexible schema design suitable for evolving operational workflows
+* Supported offline-first deployment with custom PowerShell-based setup and operational automation
+
+---
+
+### 3. Workflow-Oriented System Design
+
+Instead of building generic CRUD modules, the system was designed around real operational workflows.
+
+**Examples:**
+
+* Purchase → Goods Received → Stock Update (with validation step)
+* Batch-aware and expiry-aware stock selection during sales
+* Support for loose item sales (e.g., tablets from strips)
+
+This ensured the system aligned closely with actual pharmacy operations rather than abstract data models.
+
+---
+
+### 4. Feedback-Driven Iteration
+
+The system evolved based on continuous feedback from real users.
+
+**Key outcomes:**
+
+* Introduction of master data to reduce onboarding friction
+* UX improvements in item selection and billing workflows
+* Additional modules such as returns, dashboard insights, and bill printing
+
+This iterative approach helped prioritize usability and practicality over premature optimization.
+
+---
+
+### 5. Cost-Driven Architecture Strategy
+
+A key constraint throughout the project has been minimizing cost per client.
+
+**Implications:**
+
+* Delayed cloud adoption until product viability was validated
+* Preference for shared infrastructure over isolated resources
+* Focus on keeping licensing costs competitive with existing market solutions
+
+This continues to influence architectural decisions in v3.
+
+---
+
+### 6. Transition to Cloud-Native Architecture (Version 3)
+
+The shift to a cloud-native architecture is driven by scalability and multi-client requirements.
+
+**Key considerations:**
+
+* Move from single-client deployments to a shared SaaS model
+* Introduce event-driven workflows using Azure Service Bus
+* Use API Gateway for routing, rate limiting, and tenant-aware request handling
+* Keep infrastructure flexible (Azure Functions initially, with optional evolution to AKS if needed)
+
+The goal is to enable scalability without significantly increasing operational complexity or cost.
+
+---
+
+### 7. Data Strategy and Multi-Tenancy Design
+
+The v3 design introduces a hybrid multi-tenant data strategy.
+
+**Approach:**
+- Separate master databases per business domain (e.g., pharmacy, retail, manufacturing)  
+- Shared database for client-specific operational data for standard-tier clients  
+- Future ability to isolate high-volume clients into dedicated databases  
+
+The schema is designed to support tenant isolation with minimal application change, primarily by introducing a tenant-aware routing layer that determines the correct database target based on user and license context.
+
+This layer is also intended to enforce strict tenant boundaries so that one client cannot accidentally read or write another client’s data, even when multiple tenants share the same database server.
+
+Sensitive configuration such as connection details and related secrets are planned to be managed through Azure Key Vault as part of the cloud-native security model.
+
+---
+
+### 8. Azure SQL vs PostgreSQL (v3 Consideration)
+
+For the cloud-native version, Azure SQL is being considered over PostgreSQL based on the planned SaaS operating model.
+
+**Rationale:**
+
+* Elastic pool support enables multiple client databases to share resources efficiently
+* Allows onboarding new clients without immediately increasing database cost
+* Supports cross-database querying patterns useful for administrative and reporting scenarios
+* Aligns well with the intended multi-tenant architecture and cost model
+
+PostgreSQL remains a viable option, especially from a portability and open-source perspective. However, Azure SQL currently aligns more closely with the desired multi-tenant SaaS design and operational strategy.
+
+---
+
+### 9. Design for Evolution, Not Perfection
+
+A key principle throughout the project has been to prioritize real-world validation and incremental improvement over building a fully optimized system upfront.
+
+This is reflected in:
+
+* Starting with a simple local architecture
+* Iteratively expanding features based on usage
+* Gradually introducing architectural complexity only when required
+
+This approach helped reduce risk while continuously improving system capability.
