@@ -440,66 +440,55 @@ The system is being designed with a long-term vision of evolving into a data-dri
 
 ---
 
-## 🔹 Architecture Diagram
-
 ### Version 2 – Local Offline Architecture
 
 ```mermaid
 flowchart LR
 
-    %% User Layer
-    A[Pharmacy Staff / Store Users]
+    A[Pharmacy Staff]
 
-    %% Frontend
-    subgraph Frontend["Frontend Layer"]
-        B[Angular 13 Application]
-        B1[Sales / Billing UI]
-        B2[Stock Management UI]
-        B3[Purchase Workflow UI]
+    subgraph Frontend
+        B[Angular App]
+        B1[Sales UI]
+        B2[Stock UI]
+        B3[Purchase UI]
         B4[Dashboard UI]
     end
 
-    %% Backend
-    subgraph Backend["Backend Layer"]
-        C[Node.js Express API]
-        C1[Sales Controller]
-        C2[Stock Controller]
-        C3[Purchase Controller]
-        C4[Dashboard Controller]
+    subgraph Backend
+        C[Node API]
+        C1[Sales]
+        C2[Stock]
+        C3[Purchase]
+        C4[Dashboard]
     end
 
-    %% Database
-    subgraph Database["Local Data Layer"]
-        D[(PostgreSQL Database)]
+    subgraph Database
+        D[(PostgreSQL)]
     end
 
-    %% Ops
-    subgraph Ops["Local Operations"]
+    subgraph Ops
         E[PowerShell Scripts]
     end
 
-    %% Flow
-    A -->|Interacts with| B
+    A --> B
 
     B --> B1
     B --> B2
     B --> B3
     B --> B4
 
-    B -->|API Calls| C
+    B --> C
 
     C --> C1
     C --> C2
     C --> C3
     C --> C4
 
-    C -->|Read/Write| D
+    C --> D
 
-    %% Ops connections
-    E -->|Start Application| B
-    E -->|Start Backend| C
-    E -->|DB Setup / Backup| D
-
-### Version 3 – Target Cloud-Native Architecture
-<diagram>
-
+    E --> B
+    E --> C
+    E --> D
+...
+```
