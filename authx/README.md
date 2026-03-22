@@ -174,26 +174,34 @@ I’m happy to walk through the architecture, design decisions, and trade-offs i
 ```mermaid
 flowchart LR
 
-    A[User on Shopify Storefront] --> B[AuthX JS Widget]
+    A[User on Shopify Storefront] -->|Clicks Login| B[AuthX JS Widget]
 
-    B -->|OTP Request / OAuth Initiation| C[Azure Functions API]
+    B --> C{Choose Login Method}
 
-    C -->|Send OTP| D[Brevo Email/SMS]
-    D -->|OTP Delivered| A
+    %% OTP Flow
+    C -->|OTP Login| D[Request OTP]
+    D --> E[Azure Functions API]
+    E -->|Send OTP| F[Brevo Email/SMS]
+    F -->|OTP Delivered| A
 
     A -->|Enter OTP| B
-    B -->|Verify OTP| C
+    B -->|Verify OTP| E
 
-    C -->|OAuth Redirect| E[Google OAuth]
-    E -->|Callback| C
+    %% OAuth Flow
+    C -->|Social Login (Google)| G[Redirect to Google OAuth]
+    G --> H[Google OAuth]
+    H -->|Callback| E
 
-    C -->|Create / Fetch Customer| F[Shopify Admin API]
+    %% Backend Processing
+    E -->|Create / Fetch Customer| I[Shopify Admin API]
+    E -->|Generate JWT| J[JWT Token]
 
-    C -->|Generate JWT| G[JWT Token]
+    %% Return to Frontend
+    J --> B
 
-    G --> B
-    B -->|Store Token & Claims| H[Browser Local Storage]
+    %% Frontend Handling
+    B -->|Store Token & Claims| K[Browser Local Storage]
 
-    H --> I[Profile Page UI]
-
-    I -->|Display / Update User Info| B
+    %% Profile Experience
+    K --> L[Profile Page UI]
+    L -->|Display / Update User Info| L
