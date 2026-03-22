@@ -175,33 +175,24 @@ I’m happy to walk through the architecture, design decisions, and trade-offs i
 flowchart LR
 
     A[User on Shopify Storefront] -->|Clicks Login| B[AuthX JS Widget]
-
     B --> C{Choose Login Method}
 
-    %% OTP Flow
-    C -->|OTP Login| D[Request OTP]
+    %% OTP path
+    C -->|OTP| D[Request OTP]
     D --> E[Azure Functions API]
-    E -->|Send OTP| F[Brevo Email/SMS]
+    E -->|Send OTP| F[Brevo Email and SMS]
     F -->|OTP Delivered| A
-
     A -->|Enter OTP| B
     B -->|Verify OTP| E
 
-    %% OAuth Flow
-    C -->|Social Login (Google)| G[Redirect to Google OAuth]
+    %% Google path
+    C -->|Google| G[Redirect to Google OAuth]
     G --> H[Google OAuth]
     H -->|Callback| E
 
-    %% Backend Processing
-    E -->|Create / Fetch Customer| I[Shopify Admin API]
+    %% Unified authenticated path
+    E -->|Create or Fetch Customer| I[Shopify Admin API]
     E -->|Generate JWT| J[JWT Token]
-
-    %% Return to Frontend
     J --> B
-
-    %% Frontend Handling
-    B -->|Store Token & Claims| K[Browser Local Storage]
-
-    %% Profile Experience
+    B -->|Store Token and Claims| K[Browser Local Storage]
     K --> L[Profile Page UI]
-    L -->|Display / Update User Info| L
