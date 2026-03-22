@@ -152,6 +152,23 @@ The approach prioritized minimal operational cost while maintaining flexibility 
 * Enhance UI/UX polish and responsiveness
 
 ---
+## 🔹 Key Takeaways
+
+This project demonstrates:
+
+* Designing reusable, embeddable systems under platform constraints
+* Building cost-effective solutions using serverless architecture
+* Decoupling UI and backend through event-based integration
+* Making pragmatic trade-offs to meet real-world timelines and constraints
+
+---
+
+## 🔹 Discussion
+
+I’m happy to walk through the architecture, design decisions, and trade-offs in more detail, including how this system could be extended into a more scalable authentication platform.
+
+---
+
 ## 🔹 Architecture Diagram
 
 ```mermaid
@@ -180,20 +197,3 @@ flowchart LR
     H --> I[Profile Page UI]
 
     I -->|Display / Update User Info| B
-
----
-
-## 🔹 Key Takeaways
-
-This project demonstrates:
-
-* Designing reusable, embeddable systems under platform constraints
-* Building cost-effective solutions using serverless architecture
-* Decoupling UI and backend through event-based integration
-* Making pragmatic trade-offs to meet real-world timelines and constraints
-
----
-
-## 🔹 Discussion
-
-I’m happy to walk through the architecture, design decisions, and trade-offs in more detail, including how this system could be extended into a more scalable authentication platform.
