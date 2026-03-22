@@ -1,6 +1,6 @@
 # Engineering Portfolio
 
-Senior Software Engineer with approx 12 years of experience designing scalable systems, leading cloud transformations, and building distributed, event-driven architectures across enterprise platforms. Experienced in full-stack development, system design, and integrating complex systems under real-world constraints.
+Senior Software Engineer with 11+ years of experience designing scalable systems, leading cloud transformations, and building distributed, event-driven architectures across enterprise platforms. Experienced in full-stack development, system design, and integrating complex systems under real-world constraints.
 
 This repository highlights selected systems I’ve designed and built in a personal capacity, with a focus on:
 
@@ -20,33 +20,17 @@ A framework-agnostic authentication system designed for embedded environments li
 
 **Highlights:**
 
-* Supports mobile/email OTP and social login flows
+* Supports mobile/email OTP and Google-based social login flows
 * Pure JavaScript widget for seamless integration into host applications
-* Event-driven architecture for decoupled frontend–backend communication
-* Backend powered by Azure services handling third-party integrations and customizable JWT-based authentication
+* Event-based frontend integration using custom browser events for decoupled host communication
+* Azure Functions backend handling OTP workflows, Shopify customer provisioning, and customizable JWT-based authentication
 * Designed for reuse across multiple systems
 
 👉 [View Details](./authx/)
 
-----------------------------------------------------------------------------------------------------------------
+---
 
-### 2. Shopify Product UI Library
-
-A custom UI rendering approach for Shopify stores focused on enhancing product display and overall user experience through refined interaction patterns beyond default theme capabilities.
-
-**Highlights:**
-
-* Built dynamic product rendering using Shopify-compatible JSON data structures
-* Enhanced UX for product discovery, interaction, and cart actions
-* Event-based UI interactions enabling flexible integration with Shopify themes
-* Explored reusability across multiple storefronts before aligning with Shopify’s native templating for faster delivery turnaround time
-
-👉 [View Details](./shopify-ui/)
-
-
-----------------------------------------------------------------------------------------------------------------
-
-### 3. ERP System (Pharmacy-focused)
+### 2. ERP System (Pharmacy-focused)
 
 A lightweight ERP system designed for inventory, sales, and operational workflows, evolving from a focused inventory management solution to a broader, full-scale ERP platform.
 
@@ -59,6 +43,7 @@ A lightweight ERP system designed for inventory, sales, and operational workflow
 * Currently evolving towards a cloud-native, event-driven architecture supporting multi-store scenarios
 
 👉 [View Details](./erp-system/)
+
 
 ----------------------------------------------------------------------------------------------------------------
 
