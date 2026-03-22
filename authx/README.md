@@ -4,9 +4,11 @@
 
 AuthX is a lightweight, framework-agnostic authentication system designed for embedded environments like Shopify, particularly for non-Shopify+ stores, enabling a seamless, plug-and-play login experience.
 
-The system was built to overcome limitations of Shopify’s default authentication (email-only login) by introducing OTP-based login and social authentication, while keeping operational costs minimal and integration lightweight.
+It combines a reusable JavaScript widget with an Azure Functions–based backend to support OTP-based authentication and Google OAuth, along with customizable JWT-based identity management.
 
-While third-party Shopify apps provide similar functionality, they introduce recurring costs and limited customization. AuthX was built to provide a cost-effective, flexible alternative with full control over authentication flows, while remaining reusable across multiple storefronts.
+The system was built to overcome limitations of Shopify’s default authentication (email-only login) by introducing flexible login options while keeping integration lightweight and operational costs minimal.
+
+While third-party Shopify apps provide similar capabilities, they often introduce recurring costs and limited customization. AuthX was designed as a cost-effective and extensible alternative, giving full control over authentication flows and enabling reuse across multiple storefronts.
 
 
 ---
@@ -29,7 +31,7 @@ AuthX is designed as a **decoupled system** consisting of:
 
 * **Frontend Widget (JavaScript)** → UI + interaction layer
 * **Backend (Azure Functions - .NET Core)** → OTP generation, token issuance, integrations
-* **Host Application (Shopify Theme)** → Business logic handling via events
+* **Host Application (Shopify Theme)** → Consumes widget events to handle post-login behavior
 
 This separation allows the authentication layer to remain reusable across different storefronts without coupling to specific business logic.
 
@@ -38,7 +40,7 @@ This separation allows the authentication layer to remain reusable across differ
 1. Widget is loaded into Shopify theme
 2. UI is dynamically injected into DOM
 3. User initiates login (OTP or Google)
-4. Backend handles authentication (OTP / token generation)
+4. Backend validates identity (OTP or OAuth), provisions/fetches customer, and generates JWT
 5. Widget emits events (e.g., login success)
 6. Host application handles post-login behavior (redirect, cart sync, etc.)
 
@@ -60,7 +62,8 @@ This separation allows the authentication layer to remain reusable across differ
 ### 2. Event-Based Integration Model
 
 * Widget communicates via custom events (e.g., `authx:login-success`)
-* No direct coupling with backend APIs or Shopify logic
+* Decouples UI from host application logic using custom events
+* Backend communication is handled via API calls, while host-specific behavior is event-driven
 * Allows each client/storefront to handle behavior differently
 
 ---
@@ -81,6 +84,7 @@ This separation allows the authentication layer to remain reusable across differ
 * Backend implemented using Azure Functions (.NET Core)
 * Designed to serve multiple clients using shared infrastructure
 * Suitable for low-to-moderate traffic scenarios with minimal cost
+* Stateless function-based design reduces infrastructure overhead
 
 ---
 
@@ -126,6 +130,7 @@ The approach prioritized minimal operational cost while maintaining flexibility 
 * Event-based communication model
 * Config-driven multi-client support
 * Lightweight, framework-independent design
+* JWT-based identity propagation across storefront and profile experience
 
 ---
 
@@ -136,7 +141,7 @@ The approach prioritized minimal operational cost while maintaining flexibility 
 * No Web Component / Shadow DOM isolation (potential style conflicts)
 * Logging and observability are minimal in current version
 * Not optimized for high-scale or enterprise-grade workloads
-* Backend abstraction is minimal, with provider-specific integrations handled directly
+* Backend abstraction is intentionally minimal, prioritizing simplicity and faster iteration over extensibility
 
 > Note: The project lifecycle was limited as the associated business was discontinued early, so long-term scaling and production hardening were not fully realized.
 
