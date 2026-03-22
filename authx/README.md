@@ -174,25 +174,51 @@ I’m happy to walk through the architecture, design decisions, and trade-offs i
 ```mermaid
 flowchart LR
 
-    A[User on Shopify Storefront] -->|Clicks Login| B[AuthX JS Widget]
-    B --> C{Choose Login Method}
+    A[User on Shopify Storefront]
 
-    %% OTP path
-    C -->|OTP| D[Request OTP]
-    D --> E[Azure Functions API]
-    E -->|Send OTP| F[Brevo Email and SMS]
+    subgraph Frontend["Frontend Layer"]
+        B[AuthX JS Widget]
+        C{Choose Login Method}
+        K[Browser Local Storage]
+        L[Profile Page UI]
+    end
+
+    subgraph Backend["Backend Layer"]
+        E[Azure Functions API]
+        J[JWT Token]
+    end
+
+    subgraph OTP["OTP Flow"]
+        D[Request OTP]
+        F[Brevo Email and SMS]
+    end
+
+    subgraph OAuth["OAuth Flow"]
+        G[Redirect to Google OAuth]
+        H[Google OAuth]
+    end
+
+    subgraph Commerce["Commerce Integration"]
+        I[Shopify Admin API]
+    end
+
+    A -->|Clicks Login| B
+    B --> C
+
+    C -->|OTP| D
+    D --> E
+    E -->|Send OTP| F
     F -->|OTP Delivered| A
     A -->|Enter OTP| B
     B -->|Verify OTP| E
 
-    %% Google path
-    C -->|Google| G[Redirect to Google OAuth]
-    G --> H[Google OAuth]
+    C -->|Google| G
+    G --> H
     H -->|Callback| E
 
-    %% Unified authenticated path
-    E -->|Create or Fetch Customer| I[Shopify Admin API]
-    E -->|Generate JWT| J[JWT Token]
+    E -->|Create or Fetch Customer| I
+    E -->|Generate JWT| J
     J --> B
-    B -->|Store Token and Claims| K[Browser Local Storage]
-    K --> L[Profile Page UI]
+
+    B -->|Store Token and Claims| K
+    K --> L
